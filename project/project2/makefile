@@ -2,7 +2,7 @@
 #/bin/bash
 
 
-## Makefile for PROJECT.
+## Makefile for PROJECT2.
 
 project_name=project2
 
@@ -78,8 +78,8 @@ project.o:
 	echo Building ${project_name} 
 	echo Invoking: GNU Compiler	
 
-	${compiler} ${directory_project}\\*.c ${compiler_flag} ${flags} -I	${directory_project}\INCLUDE\ ${starterware_includes_path}  
-	${compiler} ${directory_project}\\*.S ${compiler_flag} ${flags} -I	${directory_project}\INCLUDE\ ${starterware_includes_path}  
+	${compiler} ${directory_project}\\src\\*.c ${compiler_flag} ${flags} -I	${directory_project}\INCLUDE\ ${starterware_includes_path}  -I${pdk_dir}
+	${compiler} ${directory_project}\\src\\*.S ${compiler_flag} ${flags} -I	${directory_project}\INCLUDE\ ${starterware_includes_path}  -I${pdk_dir}
 
 
 	echo ************   Linking ${project_name} now!!   ****************\n
@@ -87,7 +87,7 @@ project.o:
 	echo Building ${project_name} 
 	echo Invoking: arm-none-eabi
 
-	${linker} ${linker_flags} -T ${directory_OSAL}\\project\\debug\\am335x_ddr.lds ${directory_project}\\*.o  ${custom}crtn.o -L${custom} -lgcc  -L${toolchain_libc}\\ -lc_nano -lnosys -L${library_dir}\\  -lOSAL_LIBRARY -v -o ${directory_project}\${project_name}.out
+	${linker} ${linker_flags} -T ${directory_OSAL}\\project\\${project_name}\\am335x_ddr.lds ${directory_project}\\*.o  ${custom}crtn.o -L${custom} -lgcc  -L${toolchain_libc}\\ -lc_nano -lnosys -L${library_dir}\\  -lOSAL_LIBRARY -v -o ${directory_project}\${project_name}.out
 
 
 	${dump_assembly}
