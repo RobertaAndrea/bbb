@@ -1,0 +1,108 @@
+
+#/bin/bash
+
+
+## Makefile for PROJECT.
+
+project_name=debug
+
+directory_OSAL= C:\Users\Margarita\Desktop\OSAL
+
+directory_project=${directory_OSAL}\\project\\${project_name}
+
+## SDK PATHS ##
+
+pdk_dir= G:/ti_13/pdk_am335x_1_0_13/packages/	
+
+## TOOLS PATHS ##
+
+compiler=${toolchain_dir}\arm-none-eabi-gcc.exe
+
+linker=${toolchain_dir}\arm-none-eabi-ld.exe
+
+ar=${toolchain_dir}\arm-none-eabi-ar.exe
+
+toolchain_dir=G:\ti_13\gcc-arm-none-eabi-6-2017-q1-update\bin
+
+starterware_root=G:\starterware_backup\\
+
+starterware_includes_path +=-I${starterware_root}include\\  -I${starterware_root}include\hw\\\ -I${starterware_root}include\armv7a\\  -I${starterware_root}include\armv7a\am335x\\
+
+custom=C:\ti\gcc-arm-none-eabi-7-2018-q2-update\lib\gcc\arm-none-eabi\7.3.1\\
+
+
+## FLAGS ##
+
+compiler_flag= -c 
+flags= -mcpu=cortex-a8 -mtune=cortex-a8 -march=armv7-a -marm -Dgcc -D__ARM_ARCH_7A__ -DSOC_AM335x -Dam3359 -mfpu=neon
+linker_flags = -specs=nosys.specs -specs=nano.specs 
+
+
+
+## LIBRARIES PATHS ##
+
+toolchain_libc=G:\ti_13\gcc-arm-none-eabi-6-2017-q1-update\arm-none-eabi\lib
+toolchain_lib_gcc=G:\ti_13\gcc-arm-none-eabi-6-2017-q1-update\lib\gcc\arm-none-eabi\6.3.1
+library_dir=${directory_OSAL}\\flash
+
+
+## RECEIPES DEFINITIONS ##
+
+##### OBJECTS NAME ######
+
+output_file=project
+
+##### LIBRARY NAMES #####
+
+OSAL_LIB=OSAL_LIBRARY
+
+eMMC_LIB=eMMC
+
+## RECEIPES PATHS ##
+
+output=${directory_OSAL}output\\
+
+## POST BUILD ##
+
+
+make_bin=${toolchain_dir}\arm-none-eabi-objcopy.exe -S -O binary ${directory_project}\\${project_name}.out ${directory_project}\\${project_name}.bin 
+
+all: project.o clean_up
+	
+project.o:
+	-cls
+
+	echo
+	echo ************   Compiling debug source files  now!!   ****************\n
+	echo Building "PROJECT" 
+	echo Invoking: GNU Compiler	
+
+	${compiler} ${directory_project}\\*.c ${compiler_flag} ${flags} -I	${directory_project}\INCLUDE\ ${starterware_includes_path}  
+	${compiler} ${directory_project}\\*.S ${compiler_flag} ${flags} -I	${directory_project}\INCLUDE\ ${starterware_includes_path}  
+	echo ************   Creating LIBRARY now!!   ****************\n
+
+	${ar} -crs libDebug.a *.o
+## CLEANING UP ##
+
+clean_up:
+	move ${directory_project}\\*.o ${directory_project}\\output
+	move ${directory_project}\\*.a ${directory_project}\\debug_library_build\\
+	-cls
+	echo
+	echo ************   Cleaning LIBRARY done!!   ****************
+	
+	echo Building "PROJECT" COMPLETE
+		
+
+clean:
+
+  
+	-del ${directory_project}\\*.o
+	-del ${directory_project}\\*.out
+	-del ${directory_project}\\*.a
+	-del ${directory_project}\\*.o ${directory_project}\\debug_library_build\\*.a
+	-del ${directory_project}\\*.o ${directory_project}\\output\\*.o
+	-del ${directory_project}\\*.o ${directory_project}\\output\\*.out
+
+	
+	
